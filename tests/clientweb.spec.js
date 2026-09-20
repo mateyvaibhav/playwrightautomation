@@ -1,0 +1,36 @@
+const { test, expect } = require('@playwright/test');
+ 
+ 
+ 
+ 
+test('@Web Client App login', async ({ page }) => {
+   //js file- Login js, DashboardPage
+
+   const email = "vaibhavmatey@gmail.com";
+   const productName = 'zara coat 3';
+   const products = page.locator(".card-body");
+   await page.goto("https://rahulshettyacademy.com/client");
+   await page.locator("#userEmail").fill(email);
+   await page.locator("#userPassword").fill("Vaibhav@1030");
+   await page.locator("[value='Login']").click();
+   await page.waitForLoadState('networkidle');
+   await page.locator(".card-body b").first().waitFor();
+   const titles = await page.locator(".card-body b").allTextContents();
+   console.log(titles);
+
+   await page.pause();
+
+   const count = await products.count();
+   for( let i=0;i<count;++i)
+   {
+      if (products.nth(i).locator("b").textContent() === productName)
+      {
+         await products.nth(i).locator("text= Add To Cart").click();
+         break;
+      }
+
+
+   }
+
+     await page.pause();
+});
